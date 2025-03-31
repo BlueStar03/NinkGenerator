@@ -2,143 +2,129 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Nink Generator - Note Sequence</title>
-  <style>
-/* Container for the piano */
-.piano {
-  position: relative;
-  width: 700px;
-  height: 200px;
-  margin: 20px auto;
-}
-
-/* White keys container */
-.white-keys {
-  display: flex;
-}
-
-/* Styling white keys */
-.white-key {
-  flex: 1;
-  height: 100%;
-  border: 1px solid #000;
-  background: #fff;
-  text-align: center;
-  line-height: 200px;
-  font-size: 24px;
-  position: relative;
-  box-sizing: border-box;
-}
-
-/* Container for black keys */
-.black-keys {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60%;
-  pointer-events: none; /* Allows clicks to pass through if needed */
-}
-
-/* Styling black keys */
-.black-key {
-  position: absolute;
-  width: 50px;  /* Adjust width as needed */
-  height: 100%;
-  background: #000;
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
-  line-height: 60px;
-  z-index: 2;
-}
-
-/* Position the black keys relative to the white keys.
-   These positions are approximate and can be adjusted for best visual alignment. */
-.black-key:nth-child(1) { /* C♯ between C and D */
-  left: calc((100% / 7) - 25px);
-}
-.black-key:nth-child(2) { /* D♯ between D and E */
-  left: calc((2 * 100% / 7) - 25px);
-}
-.black-key:nth-child(3) { /* F♯ between F and G */
-  left: calc((4 * 100% / 7) - 25px);
-}
-.black-key:nth-child(4) { /* G♯ between G and A */
-  left: calc((5 * 100% / 7) - 25px);
-}
-.black-key:nth-child(5) { /* A♯ between A and B */
-  left: calc((6 * 100% / 7) - 25px);
-}
-
-
-  </style>
+  <title>Nink Generator - Organized Layout</title>
+  <!-- Link to external CSS file -->
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <h1>Nink Generator</h1>
-  
-  <!-- Nink Properties Section -->
-  <section id="ninkProperties">
-    <h2>Nink Properties</h2>
-    <p><strong>Name:</strong> Tina</p>
-    <p><strong>Gender:</strong> Female</p>
-    <p><strong>Age:</strong> 23</p>
-  </section>
-  
-  <!-- Voice Settings Section -->
-  <section id="voiceSettings">
-    <h2>Voice Settings</h2>
-    <label for="bpmInput">Beat (BPM): </label>
-    <input type="number" id="bpmInput" value="120" min="30" max="300">
-    <p>Each note (or rest) lasts one beat, which is 60 ÷ BPM seconds. For example, at 120 BPM each beat lasts 0.5 seconds.</p>
-  </section>
-  
-  <hr>
-  
-  <!-- Sequence Input Section -->
-  <h2>Play a Sequence</h2>
-  <p>Enter a sequence of notes using the following characters:</p>
-  <ul>
-    <li>D → C (261.63 Hz)</li>
-    <li>d → C♯ (277.18 Hz)</li>
-    <li>R → D (293.66 Hz)</li>
-    <li>r → D♯ (311.13 Hz)</li>
-    <li>M → E (329.63 Hz)</li>
-    <li>F → F (349.23 Hz)</li>
-    <li>f → F♯ (369.99 Hz)</li>
-    <li>S → G (392.00 Hz)</li>
-    <li>s → G♯ (415.30 Hz)</li>
-    <li>L → A (440.00 Hz)</li>
-    <li>l → A♯ (466.16 Hz)</li>
-    <li>T → B (493.88 Hz)</li>
-  </ul>
-  <p>A space in the sequence will be treated as a rest lasting one beat.</p>
-  <input type="text" id="sequenceInput" placeholder="Enter note sequence (e.g., DRMFSLT or DR MF S L T)">
-  <button id="playSequenceBtn">Play Sequence</button>
-
-  <section id="pianoReference">
-    <h2>Piano Octave Reference</h2>
-    <div class="piano">
-      <div class="white-keys">
-        <div class="white-key" data-note="C">C</div>
-        <div class="white-key" data-note="D">D</div>
-        <div class="white-key" data-note="E">E</div>
-        <div class="white-key" data-note="F">F</div>
-        <div class="white-key" data-note="G">G</div>
-        <div class="white-key" data-note="A">A</div>
-        <div class="white-key" data-note="B">B</div>
+  <div class="container">
+    <!-- Left Panel: Nink Image, Properties and Voice Settings -->
+    <div class="left-panel">
+      <h1>Nink Generator</h1>
+      <hr>
+      <div class="nink-image">
+        <img src="tina.jpg" alt="Tina">
       </div>
-      <div class="black-keys">
-        <div class="black-key" data-note="C#">C♯</div>
-        <div class="black-key" data-note="D#">D♯</div>
-        <div class="black-key" data-note="F#">F♯</div>
-        <div class="black-key" data-note="G#">G♯</div>
-        <div class="black-key" data-note="A#">A♯</div>
-      </div>
+      <section id="ninkProperties">
+        <h2>Nink Properties</h2>
+        <p><strong>Name:</strong> Tina</p>
+        <p><strong>Gender:</strong> Female</p>
+        <p><strong>Age:</strong> 23</p>
+        <p><strong>Flock:</strong> Spring</p>
+      </section>
+      <section id="voiceSettings">
+        <h2>Voice</h2>
+        <label for="bpmInput">Pace: </label>
+        <input type="number" id="bpmInput" value="120" min="30" max="300">
+        <br>
+        <label for="naturalOctaveInput">Natural Octave: </label>
+        <input type="text" id="naturalOctaveInput" value="C4">
+        <p>
+          Each note (or rest) lasts one beat (60 ÷ BPM seconds). For example, at 120 BPM each beat lasts 0.5 seconds.
+          The natural octave sets the base tone for "Do". For example, if set to A1, then "D" plays A1.
+          (Allowed values between A1 and D6.)
+        </p>
+      </section>
     </div>
-  </section>
-  
 
+    <!-- Right Panel: Sequence Input and Reference Info -->
+    <div class="right-panel">
+      <section id="sequenceSection">
+        <h2>Play a Sequence</h2>
+        <p>
+          Enter a sequence of notes using the following characters (a space is a rest lasting one beat):
+        </p>
+        <input type="text" id="sequenceInput" placeholder="e.g., DRMFSLT or DR MF S L T">
+        <button id="playSequenceBtn">Play Sequence</button>
+      </section>
+      <hr>
+      <section id="referenceInfo">
+        <h2>Reference Info</h2>
+        <section id="pianoReference">
+          <h2>Piano Octave Reference</h2>
+          <div class="piano">
+            <div class="white-keys">
+              <div class="white-key" data-note="C">D</div>
+              <div class="white-key" data-note="D">R</div>
+              <div class="white-key" data-note="E">M</div>
+              <div class="white-key" data-note="F">F</div>
+              <div class="white-key" data-note="G">S</div>
+              <div class="white-key" data-note="A">L</div>
+              <div class="white-key" data-note="B">T</div>
+            </div>
+            <div class="black-keys">
+              <div class="black-key" data-note="C#">d</div>
+              <div class="black-key" data-note="D#">r</div>
+              <div class="black-key" data-note="F#">f</div>
+              <div class="black-key" data-note="G#">s</div>
+              <div class="black-key" data-note="A#">l</div>
+            </div>
+          </div>
+        </section>
+        <hr>
+        <table>
+          <thead>
+            <tr>
+              <th>Notation</th>
+              <th>D</th>
+              <th>d</th>
+              <th>R</th>
+              <th>r</th>
+              <th>M</th>
+              <th>F</th>
+              <th>f</th>
+              <th>S</th>
+              <th>s</th>
+              <th>L</th>
+              <th>l</th>
+              <th>T</th>
+            </tr>
+          </thead>
+          <tr>
+            <td>Nink Solfege</td>
+            <td>Do</td>
+            <td>da</td>
+            <td>Re</td>
+            <td>ri</td>
+            <td>Mi</td>
+            <td>Fa</td>
+            <td>fi</td>
+            <td>So</td>
+            <td>su</td>
+            <td>Lu</td>
+            <td>le</td>
+            <td>Ti</td>
+          </tr>
+          <tr>
+            <td>Note</td>
+            <td>C</td>
+            <td>C#</td>
+            <td>D</td>
+            <td>D#</td>
+            <td>E</td>
+            <td>F</td>
+            <td>F#</td>
+            <td>G</td>
+            <td>G#</td>
+            <td>A</td>
+            <td>A#</td>
+            <td>B</td>
+          </tr>
+        </table>
+      </section>
+    </div>
+  </div>
+  
   <!-- Link to external JavaScript file -->
   <script src="main.js"></script>
 </body>

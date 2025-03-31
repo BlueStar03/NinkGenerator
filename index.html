@@ -29,10 +29,31 @@
         <br>
         <label for="naturalOctaveInput">Natural Octave: </label>
         <input type="text" id="naturalOctaveInput" value="C4">
+        <br>
+        <label for="rangeInput">Range: </label>
+        <select id="rangeInput">
+          <option value="normal">Normal</option>
+          <option value="higher">Higher</option>
+          <option value="lower">Lower</option>
+        </select>
         <p>
           Each note (or rest) lasts one beat (60 ÷ BPM seconds). For example, at 120 BPM each beat lasts 0.5 seconds.
-          The natural octave sets the base tone for "Do". For example, if set to A1, then "D" plays A1.
-          (Allowed values between A1 and D6.)
+          The natural octave sets the base tone for "Do" (e.g. C4).
+          Allowed natural octaves: between A1 and D6.
+          <br><br>
+          Octave markers:
+          <br>
+          • Single high: "/" or "!" (one octave higher)
+          <br>
+          • Double high: "//" or "!!" (highest octave; available only if Range is Higher)
+          <br>
+          • Single low: "\" or "¡" (one octave lower)
+          <br>
+          • Double low: "\\" or "¡¡" (lowest octave; available only if Range is Lower)
+          <br>
+          • "~" resets to natural.
+          <br>
+          If no marker is present, the note is assumed to be in the natural octave.
         </p>
       </section>
     </div>
@@ -42,9 +63,16 @@
       <section id="sequenceSection">
         <h2>Play a Sequence</h2>
         <p>
-          Enter a sequence of notes using the following characters (a space is a rest lasting one beat):
+          Enter a sequence that may include note symbols (D, d, R, r, M, F, f, S, s, L, l, T), 
+          octave markers as defined above, and spaces (a space is a one‐beat rest).
+          <br>
+          For example:
+          <br>
+          – If natural octave is C4 and Range is Higher: "//D~D\D" plays: C6, C4, C3.
+          <br>
+          – If natural octave is C4 and Range is Lower: "\D" plays C2.
         </p>
-        <input type="text" id="sequenceInput" placeholder="e.g., DRMFSLT or DR MF S L T">
+        <input type="text" id="sequenceInput" placeholder='e.g., //D~D\D or /DDR\R R~Dd'>
         <button id="playSequenceBtn">Play Sequence</button>
       </section>
       <hr>

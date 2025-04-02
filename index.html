@@ -1,105 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Nink Generator - Organized Layout</title>
-  <!-- Link to external CSS file -->
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nink Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .column {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    img {
+      max-width: 200px;
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    table {
+      border-collapse: collapse;
+      margin-top: 20px;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      font-size: 13px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    /* Responsive layout for small screens */
+    @media (max-width: 700px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Nink Generator</h1>
+    <p>Welcome to the Nink Generator! Learn about your Nink’s characteristics and customize its voice before playing your note sequences using our unique notation.</p>
+  </header>
+
   <div class="container">
-    <!-- Left Panel: Nink Image, Properties and Voice Settings -->
-    <div class="left-panel">
-      <h1>Nink Generator</h1>
-      <hr>
-      <div class="nink-image">
-        <img src="tina.jpg" alt="Tina">
-      </div>
-      <section id="ninkProperties">
-        <h2>Nink Properties</h2>
+    <!-- Left Column: Nink Properties & Voice Properties -->
+    <div class="column">
+      <!-- Nink Characteristics Section -->
+      <section id="nink-characteristics" class="section">
+        <h2>Nink Characteristics</h2>
+        <img src="tina.jpg" alt="Tina the Nink" />
         <p><strong>Name:</strong> Tina</p>
+        <p><strong>Age:</strong> 24</p>
         <p><strong>Gender:</strong> Female</p>
-        <p><strong>Age:</strong> 23</p>
         <p><strong>Flock:</strong> Spring</p>
       </section>
-      <section id="voiceSettings">
-        <h2>Voice</h2>
-        <label for="bpmInput">Pace: </label>
-        <input type="number" id="bpmInput" value="120" min="30" max="300">
-        <br>
-        <label for="naturalOctaveInput">Natural Octave: </label>
-        <input type="text" id="naturalOctaveInput" value="C4">
-        <br>
-        <label for="rangeInput">Range: </label>
-        <select id="rangeInput">
-          <option value="normal">Normal</option>
-          <option value="higher">Higher</option>
-          <option value="lower">Lower</option>
+
+      <!-- Voice Properties Section -->
+      <section id="voice-properties" class="section">
+        <h2>Voice Properties</h2>
+        <label for="naturalToneInput">Natural Tone (default C4):</label>
+        <input type="text" id="naturalToneInput" value="C4" placeholder="e.g., C4" />
+        <label for="paceInput">Pace (BPM, default 120):</label>
+        <input type="number" id="paceInput" value="120" placeholder="120" />
+        <label for="rangeSelect">Range:</label>
+        <select id="rangeSelect">
+          <option value="Normal" selected>Normal</option>
+          <option value="Lower">Lower</option>
+          <option value="Higher">Higher</option>
+          <option value="Full">Full</option>
         </select>
-        <p>
-          Each note (or rest) lasts one beat (60 ÷ BPM seconds). For example, at 120 BPM each beat lasts 0.5 seconds.
-          The natural octave sets the base tone for "Do" (e.g. C4).
-          Allowed natural octaves: between A1 and D6.
-          <br><br>
-          Octave markers:
-          <br>
-          • Single high: "/" or "!" (one octave higher)
-          <br>
-          • Double high: "//" or "!!" (highest octave; available only if Range is Higher)
-          <br>
-          • Single low: "\" or "¡" (one octave lower)
-          <br>
-          • Double low: "\\" or "¡¡" (lowest octave; available only if Range is Lower)
-          <br>
-          • "~" resets to natural.
-          <br>
-          If no marker is present, the note is assumed to be in the natural octave.
-        </p>
       </section>
     </div>
 
-    <!-- Right Panel: Sequence Input and Reference Info -->
-    <div class="right-panel">
-      <section id="sequenceSection">
-        <h2>Play a Sequence</h2>
-        <p>
-          Enter a sequence that may include note symbols (D, d, R, r, M, F, f, S, s, L, l, T), 
-          octave markers as defined above, and spaces (a space is a one‐beat rest).
-          <br>
-          For example:
-          <br>
-          – If natural octave is C4 and Range is Higher: "//D~D\D" plays: C6, C4, C3.
-          <br>
-          – If natural octave is C4 and Range is Lower: "\D" plays C2.
-        </p>
-        <input type="text" id="sequenceInput" placeholder='e.g., //D~D\D or /DDR\R R~Dd'>
-        <button id="playSequenceBtn">Play Sequence</button>
+    <!-- Right Column: Piano, Note Input & Notation Reference -->
+    <div class="column">
+      <!-- Piano Canvas Section -->
+      <section id="piano-container" class="section">
+        <h2>Piano Keyboard</h2>
+        <canvas id="pianoCanvas" width="500" height="100"></canvas>
       </section>
-      <hr>
-      <section id="referenceInfo">
-        <h2>Reference Info</h2>
-        <section id="pianoReference">
-          <h2>Piano Octave Reference</h2>
-          <div class="piano">
-            <div class="white-keys">
-              <div class="white-key" data-note="C">D</div>
-              <div class="white-key" data-note="D">R</div>
-              <div class="white-key" data-note="E">M</div>
-              <div class="white-key" data-note="F">F</div>
-              <div class="white-key" data-note="G">S</div>
-              <div class="white-key" data-note="A">L</div>
-              <div class="white-key" data-note="B">T</div>
-            </div>
-            <div class="black-keys">
-              <div class="black-key" data-note="C#">d</div>
-              <div class="black-key" data-note="D#">r</div>
-              <div class="black-key" data-note="F#">f</div>
-              <div class="black-key" data-note="G#">s</div>
-              <div class="black-key" data-note="A#">l</div>
-            </div>
-          </div>
-        </section>
-        <hr>
+
+      <!-- Note Input Section -->
+      <section id="note-input" class="section">
+        <h2>Enter Nink Notes</h2>
+        <label for="noteInput">
+          Use <code>( )</code> for bell voice and <code>{ }</code> for whistle voice.<br/>
+          Precede any note or rest with timing modifiers:  
+          <code>:</code> (half beat), <code>::</code> (quarter beat),  
+          <code>_</code> (double beat), <code>__</code> (quad beat).<br/>
+          For octave changes, use:  
+          <code>/</code> or <code>!</code> for high octave (+12),  
+          <code>\</code> or <code>¡</code> for low octave (–12);  
+          <code>//</code> or <code>!!</code> for higher octave (+24),  
+          <code>\\</code> or <code>¡¡</code> for lower octave (–24);  
+          and <code>~</code> to reset to natural.<br/>
+          <strong>Example:</strong> <code>//DRM~FSLT</code> or <code>{D/R}</code>
+        </label>
+        <input type="text" id="noteInput" placeholder="e.g., //DRM~FSLT or {D/R}" size="50" />
+        <br/>
+        <button id="playButton">Play Notes</button>
+      </section>
+
+      <!-- Notation Reference Section -->
+      <section id="notation-reference" class="section">
+        <h2>Notation Reference</h2>
         <table>
           <thead>
             <tr>
@@ -118,42 +165,439 @@
               <th>T</th>
             </tr>
           </thead>
-          <tr>
-            <td>Nink Solfege</td>
-            <td>Do</td>
-            <td>da</td>
-            <td>Re</td>
-            <td>ri</td>
-            <td>Mi</td>
-            <td>Fa</td>
-            <td>fi</td>
-            <td>So</td>
-            <td>su</td>
-            <td>Lu</td>
-            <td>le</td>
-            <td>Ti</td>
-          </tr>
-          <tr>
-            <td>Note</td>
-            <td>C</td>
-            <td>C#</td>
-            <td>D</td>
-            <td>D#</td>
-            <td>E</td>
-            <td>F</td>
-            <td>F#</td>
-            <td>G</td>
-            <td>G#</td>
-            <td>A</td>
-            <td>A#</td>
-            <td>B</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>Nink Solfege</td>
+              <td>Do</td>
+              <td>da</td>
+              <td>Re</td>
+              <td>ri</td>
+              <td>Mi</td>
+              <td>Fa</td>
+              <td>fi</td>
+              <td>So</td>
+              <td>su</td>
+              <td>Lu</td>
+              <td>le</td>
+              <td>Ti</td>
+            </tr>
+            <tr>
+              <td>Note offset</td>
+              <td>+0</td>
+              <td>+1</td>
+              <td>+2</td>
+              <td>+3</td>
+              <td>+4</td>
+              <td>+5</td>
+              <td>+6</td>
+              <td>+7</td>
+              <td>+8</td>
+              <td>+9</td>
+              <td>+10</td>
+              <td>+11</td>
+            </tr>
+            <tr>
+              <td>Example:</td>
+              <td colspan="6">DRMFSLT</td>
+              <td colspan="6">DdRrMFfSsLlT</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Notation</th>
+              <th>(SPACE)</th>
+              <th>.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Example</td>
+              <td>D R</td>
+              <td>D.R</td>
+            </tr>
+            <tr>
+              <td colspan="3">Rest for one beat</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Notation</th>
+              <th>::</th>
+              <th>:</th>
+              <th>(NONE)</th>
+              <th>_</th>
+              <th>__</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Time modifier</td>
+              <td>(1/4)</td>
+              <td>(1/2)</td>
+              <td>x1</td>
+              <td>x2</td>
+              <td>x4</td>
+            </tr>
+            <tr>
+              <td colspan="6">Placed in front of notes or rests to modify duration.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Notation</th>
+              <th>( )</th>
+              <th>{ }</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Voice</td>
+              <td>Bell</td>
+              <td>Whistle</td>
+            </tr>
+            <tr>
+              <td colspan="3">If no voice markers are used, the default is Bell.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Octave Markers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Use <code>/</code> or <code>!</code> for high octave (+12), <code>//</code> or <code>!!</code> for higher octave (+24),<br/>
+                <code>\</code> or <code>¡</code> for low octave (–12), <code>\\</code> or <code>¡¡</code> for lower octave (–24), and <code>~</code> to reset.
+              </td>
+            </tr>
+          </tbody>
         </table>
       </section>
     </div>
   </div>
-  
-  <!-- Link to external JavaScript file -->
-  <script src="main.js"></script>
+
+  <!-- JavaScript: Piano drawing and Nink note parsing/playback -->
+  <script>
+    // Draw a simplified 88-key piano on the canvas.
+    function drawPiano() {
+      const canvas = document.getElementById("pianoCanvas");
+      const ctx = canvas.getContext("2d");
+      const whiteKeyCount = 52;
+      const whiteKeyWidth = canvas.width / whiteKeyCount;
+      const whiteKeyHeight = canvas.height;
+      const blackKeyWidth = whiteKeyWidth * 0.6;
+      const blackKeyHeight = canvas.height * 0.6;
+      
+      // Pattern for white keys (starting from A): whether a black key follows.
+      // A has a black key (A#), B does not, then C, D, F, G have black keys; E and B do not.
+      const whiteKeyPattern = {
+        'A': true,
+        'B': false,
+        'C': true,
+        'D': true,
+        'E': false,
+        'F': true,
+        'G': true
+      };
+      
+      // Generate white keys note letters starting with A0.
+      let whiteKeys = [];
+      whiteKeys.push('A');
+      whiteKeys.push('B');
+      const cycle = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+      for (let i = 2; i < whiteKeyCount; i++) {
+        whiteKeys.push(cycle[(i - 2) % 7]);
+      }
+      
+      // Draw white keys.
+      for (let i = 0; i < whiteKeyCount; i++) {
+        let x = i * whiteKeyWidth;
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+        ctx.strokeStyle = "#000";
+        ctx.strokeRect(x, 0, whiteKeyWidth, whiteKeyHeight);
+      }
+      
+      // Draw black keys.
+      for (let i = 0; i < whiteKeyCount; i++) {
+        let note = whiteKeys[i];
+        // Only draw a black key if the white key should have one.
+        if (whiteKeyPattern[note]) {
+          // For the last white key, skip drawing a black key.
+          if (i === whiteKeyCount - 1) continue;
+          // Position the black key: centered over the gap between white key i and i+1.
+          let x = (i + 1) * whiteKeyWidth - blackKeyWidth / 2;
+          ctx.fillStyle = "#000";
+          ctx.fillRect(x, 0, blackKeyWidth, blackKeyHeight);
+        }
+      }
+    }
+    
+    // Call drawPiano when the DOM is loaded.
+    document.addEventListener("DOMContentLoaded", drawPiano);
+    
+    // --- The Nink note parsing and playback code remains unchanged below ---
+    
+    const ninkNoteIntervals = {
+      'D': 0, 'd': 1, 'R': 2, 'r': 3, 'M': 4,
+      'F': 5, 'f': 6, 'S': 7, 's': 8, 'L': 9,
+      'l': 10, 'T': 11
+    };
+    
+    function midiToFrequency(midi) {
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+    
+    function parseNaturalTone(nt) {
+      const regex = /^([A-Ga-g])([#b]?)(\d)$/;
+      const match = nt.match(regex);
+      if (!match) return null;
+      const noteLetter = match[1].toUpperCase();
+      const accidental = match[2];
+      const octave = parseInt(match[3], 10);
+      const baseSemitones = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+      let semitone = baseSemitones[noteLetter];
+      if (accidental === '#') semitone += 1;
+      else if (accidental === 'b') semitone -= 1;
+      return (octave + 1) * 12 + semitone;
+    }
+    
+    function parseOctaveMarker(input, index) {
+      let char = input[index];
+      if (char === '~') {
+        return { shift: 0, newIndex: index + 1 };
+      }
+      if (char === '/' || char === '!') {
+        if (index + 1 < input.length && input[index + 1] === char) {
+          return { shift: 24, newIndex: index + 2 };
+        } else {
+          return { shift: 12, newIndex: index + 1 };
+        }
+      }
+      if (char === '\\' || char === '¡') {
+        if (index + 1 < input.length && input[index + 1] === char) {
+          return { shift: -24, newIndex: index + 2 };
+        } else {
+          return { shift: -12, newIndex: index + 1 };
+        }
+      }
+      return null;
+    }
+    
+    function playErrorSound(audioContext, timeOffset, duration) {
+      const bufferSize = audioContext.sampleRate * duration;
+      const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const output = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+      const whiteNoise = audioContext.createBufferSource();
+      whiteNoise.buffer = buffer;
+      const gainNode = audioContext.createGain();
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + timeOffset);
+      whiteNoise.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      whiteNoise.start(audioContext.currentTime + timeOffset);
+      whiteNoise.stop(audioContext.currentTime + timeOffset + duration);
+    }
+    
+    function parseTimingModifier(input, index) {
+      let multiplier = 1;
+      if (index < input.length) {
+        if (input[index] === ':') {
+          if (index + 1 < input.length && input[index+1] === ':') {
+            multiplier = 0.25;
+            index += 2;
+          } else {
+            multiplier = 0.5;
+            index += 1;
+          }
+        } else if (input[index] === '_') {
+          if (index + 1 < input.length && input[index+1] === '_') {
+            multiplier = 4;
+            index += 2;
+          } else {
+            multiplier = 2;
+            index += 1;
+          }
+        }
+      }
+      return { multiplier, index };
+    }
+    
+    function scheduleNote(noteChar, voice, timeOffset, noteDuration, naturalToneMidi, octaveShift, audioContext, errorFlag) {
+      if (errorFlag) {
+        playErrorSound(audioContext, timeOffset, noteDuration);
+        return true;
+      }
+      const interval = ninkNoteIntervals[noteChar];
+      if (interval === undefined) {
+        alert("Invalid note: " + noteChar);
+        return false;
+      }
+      const midiNote = naturalToneMidi + octaveShift + interval;
+      if (midiNote < 21 || midiNote > 108) {
+        playErrorSound(audioContext, timeOffset, noteDuration);
+        return true;
+      }
+      const frequency = midiToFrequency(midiNote);
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      const startTime = audioContext.currentTime + timeOffset;
+      
+      if (voice === "bell") {
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0.0, startTime);
+        gainNode.gain.linearRampToValueAtTime(1.0, startTime + Math.min(0.02 * noteDuration, 0.05));
+        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration);
+      } else if (voice === "whistle") {
+        oscillator.type = 'triangle';
+        gainNode.gain.setValueAtTime(0.0, startTime);
+        gainNode.gain.linearRampToValueAtTime(1.0, startTime + Math.min(0.01 * noteDuration, 0.03));
+        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration);
+      }
+      oscillator.frequency.setValueAtTime(frequency, startTime);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + noteDuration);
+      return true;
+    }
+    
+    function playNoteSequence() {
+      const naturalToneStr = document.getElementById("naturalToneInput").value.trim();
+      let naturalToneMidi = parseNaturalTone(naturalToneStr);
+      if (naturalToneMidi === null) {
+        alert("Invalid natural tone. Using default C4.");
+        naturalToneMidi = parseNaturalTone("C4");
+      }
+      
+      const bpm = parseFloat(document.getElementById("paceInput").value) || 120;
+      const beatDuration = 60 / bpm;
+      
+      const range = document.getElementById("rangeSelect").value;
+      let allowedSet;
+      switch(range) {
+        case "Normal":
+          allowedSet = new Set([-12, 0, 12]);
+          break;
+        case "Higher":
+          allowedSet = new Set([-12, 0, 12, 24]);
+          break;
+        case "Lower":
+          allowedSet = new Set([-24, -12, 0, 12]);
+          break;
+        case "Full":
+          allowedSet = new Set([-24, -12, 0, 12, 24]);
+          break;
+        default:
+          allowedSet = new Set([-12, 0, 12]);
+      }
+      
+      const input = document.getElementById("noteInput").value;
+      if (input === "") {
+        alert("Please enter a sequence of notes.");
+        return;
+      }
+      
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      let timeOffset = 0;
+      let i = 0;
+      let currentVoice = "bell";
+      let currentOctaveShift = 0;
+      let errorOctave = false;
+      
+      while (i < input.length) {
+        let octaveMarker = parseOctaveMarker(input, i);
+        if (octaveMarker !== null) {
+          let candidate = octaveMarker.shift;
+          if (!allowedSet.has(candidate)) {
+            currentOctaveShift = candidate;
+            errorOctave = true;
+          } else {
+            currentOctaveShift = candidate;
+            errorOctave = false;
+          }
+          i = octaveMarker.newIndex;
+          continue;
+        }
+        if (input[i] === '~') {
+          currentOctaveShift = 0;
+          errorOctave = false;
+          i++;
+          continue;
+        }
+        
+        if (input[i] === '(' || input[i] === '{') {
+          let groupVoice = (input[i] === '(') ? "bell" : "whistle";
+          let closing = (input[i] === '(') ? ')' : '}';
+          let savedOctave = currentOctaveShift;
+          let groupCurrentOctave = currentOctaveShift;
+          i++;
+          while (i < input.length && input[i] !== closing) {
+            let internalOctave = parseOctaveMarker(input, i);
+            if (internalOctave !== null) {
+              let candidate = internalOctave.shift;
+              if (!allowedSet.has(candidate)) {
+                groupCurrentOctave = candidate;
+                errorOctave = true;
+              } else {
+                groupCurrentOctave = candidate;
+                errorOctave = false;
+              }
+              i = internalOctave.newIndex;
+              continue;
+            }
+            let { multiplier, index } = parseTimingModifier(input, i);
+            i = index;
+            if (i >= input.length) break;
+            let token = input[i];
+            if (token === ' ' || token === '.') {
+              timeOffset += multiplier * beatDuration;
+            } else {
+              if (!scheduleNote(token, groupVoice, timeOffset, multiplier * beatDuration, naturalToneMidi, groupCurrentOctave, audioContext, errorOctave)) {
+                return;
+              }
+              timeOffset += multiplier * beatDuration;
+            }
+            i++;
+          }
+          i++;
+          currentOctaveShift = savedOctave;
+          currentVoice = "bell";
+          continue;
+        }
+        
+        let { multiplier, index } = parseTimingModifier(input, i);
+        i = index;
+        if (i >= input.length) break;
+        let token = input[i];
+        if (token === ' ' || token === '.') {
+          timeOffset += multiplier * beatDuration;
+        } else {
+          if (!scheduleNote(token, currentVoice, timeOffset, multiplier * beatDuration, naturalToneMidi, currentOctaveShift, audioContext, errorOctave)) {
+            return;
+          }
+          timeOffset += multiplier * beatDuration;
+        }
+        i++;
+      }
+    }
+    
+    document.getElementById("playButton").addEventListener("click", playNoteSequence);
+  </script>
 </body>
 </html>

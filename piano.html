@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>88-Key Piano (800px wide)</title>
+  <style>
+    /* Container for the piano */
+    #piano {
+      position: relative;
+      width: 800px;
+      margin: 20px auto;
+      border: 2px solid #333;
+      background: #ccc;
+    }
+    /* Basic styling for all keys */
+    .key {
+      position: absolute;
+      border: 1px solid #000;
+      box-sizing: border-box;
+    }
+    /* White keys styling */
+    .white-key {
+      background: #fff;
+      z-index: 1;
+    }
+    /* Black keys styling */
+    .black-key {
+      background: #000;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div id="piano"></div>
+  
+  <script>
+    const piano = document.getElementById('piano');
+    const totalWhiteKeys = 52;
+    const containerWidth = 800;
+    // Original white key width is 40px; total original width = 40*52 = 2080px.
+    // Compute the scale factor.
+    const scale = containerWidth / (40 * totalWhiteKeys);
+    
+    // Scale key dimensions from the original design.
+    const whiteKeyWidth = 40 * scale;      // Originally 40px
+    const blackKeyWidth = 25 * scale;      // Originally 25px
+    const whiteKeyHeight = 200 * scale;    // Originally 200px
+    const blackKeyHeight = 120 * scale;    // Originally 120px
+
+    // Adjust container height to match the scaled white key height.
+    piano.style.height = whiteKeyHeight + 'px';
+    
+    // Create the array of white key labels.
+    const whiteKeys = [];
+    whiteKeys.push('A0');
+    whiteKeys.push('B0');
+    for (let octave = 1; octave <= 7; octave++) {
+      ['C', 'D', 'E', 'F', 'G', 'A', 'B'].forEach(note => {
+        whiteKeys.push(note + octave);
+      });
+    }
+    whiteKeys.push('C8');
+    
+    // Determines if a black key should appear after a given white key.
+    function hasBlackKey(note) {
+      const letter = note[0];
+      return letter !== 'B' && letter !== 'E';
+    }
+    
+    // Generate and position each white and black key.
+    whiteKeys.forEach((note, index) => {
+      // Create the white key.
+      const whiteKey = document.createElement('div');
+      whiteKey.classList.add('key', 'white-key');
+      whiteKey.style.width = whiteKeyWidth + 'px';
+      whiteKey.style.height = whiteKeyHeight + 'px';
+      whiteKey.style.left = (index * whiteKeyWidth) + 'px';
+      whiteKey.setAttribute('data-note', note);
+      piano.appendChild(whiteKey);
+      
+      // Create the black key (if applicable).
+      if (index < whiteKeys.length - 1 && hasBlackKey(note)) {
+        const blackKey = document.createElement('div');
+        blackKey.classList.add('key', 'black-key');
+        blackKey.style.width = blackKeyWidth + 'px';
+        blackKey.style.height = blackKeyHeight + 'px';
+        // Position the black key so that it's centered between the current and next white key.
+        blackKey.style.left = (index * whiteKeyWidth + whiteKeyWidth - (blackKeyWidth / 2)) + 'px';
+        blackKey.style.top = '0px';
+        blackKey.setAttribute('data-note', note + '#');
+        piano.appendChild(blackKey);
+      }
+    });
+  </script>
+</body>
+</html>

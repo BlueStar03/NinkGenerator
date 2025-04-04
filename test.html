@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nink Generator - Sequence Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+    }
+    label {
+      display: block;
+      margin: 1em 0 0.5em;
+    }
+    input {
+      padding: 0.5em;
+      font-size: 1em;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    .section {
+      margin-bottom: 2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nink Generator Voice Tone, Pace & Sequence</h1>
+  
+  <!-- Voice Tone Settings -->
+  <div class="section">
+    <form id="toneForm">
+      <label for="bellTone">Bell Tone (A1 to C#6, e.g., C4):</label>
+      <input type="text" id="bellTone" name="bellTone" value="C4" />
+      <span id="bellError" class="error"></span>
+      
+      <label for="whistleTone">Whistle Tone (A1 to C#6, e.g., C4):</label>
+      <input type="text" id="whistleTone" name="whistleTone" value="C4" />
+      <span id="whistleError" class="error"></span>
+    </form>
+  </div>
+  
+  <!-- Pace & Sequence Input -->
+  <div class="section">
+    <label for="paceInput">Pace (BPM, default 120):</label>
+    <input type="number" id="paceInput" name="paceInput" value="120" min="1" />
+    <span id="paceError" class="error"></span>
+    
+    <br/><br/>
+    <label for="sequenceInput">
+      Enter Sequence using Nink Solfege:
+      <br>
+      D = Do, d = da, R = Re, r = ri, M = Mi, F = Fa, f = fi, S = So, s = su, L = Lu, l = le, T = Ti.
+      <br>
+      (Use space or period for a rest.)
+    </label>
+    <input type="text" id="sequenceInput" name="sequenceInput" placeholder="e.g., D R or D.R or DRMfsT" />
+    <span id="sequenceError" class="error"></span>
+    
+    <br/><br/>
+    <button type="button" id="playButton">Play Sequence</button>
+  </div>
+  
+  <script>
+    // Mapping for tone note strings to a numeric value (using MIDI note number convention)
+    const noteValues = {
+      "C": 0,
+      "C#": 1,
+      "D": 2,
+      "D#": 3,
+      "E": 4,
+      "F": 5,
+      "F#": 6,
+      "G": 7,
+      "G#": 8,
+      "A": 9,
+      "A#": 10,
+      "B": 11
+    };
+
+    // Convert a note string (e.g., "C4" or "C#6") into a MIDI note number.
+    // Formula: MIDI = (octave + 1) * 12 + noteValue
+    function noteToNumber(noteStr) {
+      // Expected format: Letter (A-G), optional "#", followed by a single digit octave.
+      const regex = /^([A-G]#?)(\d)$/;
+      const match = noteStr.match(regex);
+      if (!match) return null;
+      const note = match[1];
+      const octave = parseInt(match[2], 10);
+      if (!(note in noteValues)) return null;
+      return (octave + 1) * 12 + noteValues[note];
+    }
+
+    // Convert a MIDI note number to a frequency in Hz.
+    function midiToFrequency(midi) {
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    // Define allowed MIDI range: A1 to C#6.
+    const minValue = noteToNumber("A1"); // Roughly MIDI 33.
+    const maxValue = noteToNumber("C#6"); // Roughly MIDI 85.
+
+    // Validate tone input (for bell or whistle)
+    function validateTone(inputId, errorId) {
+      const inputElem = document.getElementById(inputId);
+      const errorElem = document.getElementById(errorId);
+      const noteStr = inputElem.value.trim();
+      const noteNum = noteToNumber(noteStr);
+      if (noteNum === null) {
+        errorElem.textContent = "Invalid format. Use a note (A-G, optional #) followed by an octave (1-6).";
+        return false;
+      }
+      if (noteNum < minValue || noteNum > maxValue) {
+        errorElem.textContent = "Note out of allowed range: must be between A1 and C#6.";
+        return false;
+      }
+      errorElem.textContent = "";
+      return true;
+    }
+
+    // Validate the pace input (BPM)
+    function validatePace() {
+      const paceElem = document.getElementById("paceInput");
+      const paceError = document.getElementById("paceError");
+      const bpm = parseFloat(paceElem.value.trim());
+      if (isNaN(bpm) || bpm <= 0) {
+        paceError.textContent = "Please enter a valid BPM (a positive number).";
+        return null;
+      }
+      paceError.textContent = "";
+      return bpm;
+    }
+
+    // Mapping for sequence characters (Nink Solfege) to semitone offsets.
+    // D = Do (0), d = da (1), R = Re (2), r = ri (3),
+    // M = Mi (4), F = Fa (5), f = fi (6), S = So (7),
+    // s = su (8), L = Lu (9), l = le (10), T = Ti (11)
+    const sequenceMapping = {
+      'D': 0,
+      'd': 1,
+      'R': 2,
+      'r': 3,
+      'M': 4,
+      'F': 5,
+      'f': 6,
+      'S': 7,
+      's': 8,
+      'L': 9,
+      'l': 10,
+      'T': 11
+    };
+
+    // Validate the sequence input.
+    // Allowed characters: Nink Solfege letters (D, d, R, r, etc.) and rest markers: space and period.
+    function validateSequence() {
+      const seqInput = document.getElementById("sequenceInput").value;
+      const seqError = document.getElementById("sequenceError");
+      // Allow letters plus space and period.
+      const regex = /^[DdRrMFfSsLlT .]+$/;
+      if (!regex.test(seqInput)) {
+        seqError.textContent = "Sequence contains invalid characters.";
+        return null;
+      }
+      seqError.textContent = "";
+      // Split into an array of characters.
+      return seqInput.split('');
+    }
+
+    // Create an AudioContext for sound generation.
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Global variable for the bell sample buffer.
+    let bellBuffer = null;
+    
+    // Load the bell sample (bell.wav) recorded at C4.
+    fetch('bell.wav')
+      .then(response => response.arrayBuffer())
+      .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+      .then(decodedBuffer => {
+        bellBuffer = decodedBuffer;
+        console.log("Bell sample loaded. Duration:", bellBuffer.duration, "seconds");
+      })
+      .catch(error => console.error('Error loading bell sample:', error));
+
+    // Function to play the whistle note using a simple oscillator.
+    function playWhistleNoteAtTime(frequency, startTime, duration) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.frequency.value = frequency;
+      osc.type = 'sine'; // Basic sine wave for whistle.
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      // Simple gain envelope.
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.5, startTime + 0.01);
+      gain.gain.setValueAtTime(0.5, startTime + duration - 0.05);
+      gain.gain.linearRampToValueAtTime(0, startTime + duration);
+      
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    }
+
+    // Function to play a bell note using the bell sample.
+    // The sample is pitch-shifted by adjusting playbackRate.
+    // A random start point is chosen to vary the sample.
+    function playBellSampleAtTime(targetFreq, startTime, noteDuration) {
+      if (!bellBuffer) {
+        console.warn("Bell sample not loaded yet, using oscillator fallback.");
+        playWhistleNoteAtTime(targetFreq, startTime, noteDuration);
+        return;
+      }
+      // The sample is recorded at C4.
+      const baseFreq = midiToFrequency(noteToNumber("C4")); // C4 frequency (~261.63 Hz)
+      const playbackRate = targetFreq / baseFreq;
+      // When pitch-shifted, the segment of the sample needed (in the buffer) is noteDuration * playbackRate seconds.
+      const segmentDuration = noteDuration * playbackRate;
+      // Randomize the starting point in the buffer so long as there is enough room.
+      let maxStart = bellBuffer.duration - segmentDuration;
+      if (maxStart < 0) maxStart = 0;
+      const randomStart = Math.random() * maxStart;
+      
+      const source = audioCtx.createBufferSource();
+      source.buffer = bellBuffer;
+      source.playbackRate.value = playbackRate;
+      source.connect(audioCtx.destination);
+      // Play the segment starting at randomStart for segmentDuration seconds.
+      source.start(startTime, randomStart, segmentDuration);
+    }
+
+    // Play the sequence when the Play button is clicked.
+    document.getElementById("playButton").addEventListener("click", async function() {
+      // Resume AudioContext if needed.
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+      
+      // Validate tone inputs.
+      const bellValid = validateTone("bellTone", "bellError");
+      const whistleValid = validateTone("whistleTone", "whistleError");
+      if (!bellValid || !whistleValid) return;
+      
+      // Validate BPM pace.
+      const bpm = validatePace();
+      if (bpm === null) return;
+      
+      // Validate sequence input.
+      const sequenceArray = validateSequence();
+      if (!sequenceArray) return;
+      
+      // Calculate note duration based on BPM.
+      const noteDuration = 60 / bpm;  // seconds per note.
+      const gap = noteDuration * 0.1; // 10% gap between beats.
+      
+      // Get base MIDI numbers for bell and whistle tones.
+      const bellBase = noteToNumber(document.getElementById("bellTone").value.trim());
+      const whistleBase = noteToNumber(document.getElementById("whistleTone").value.trim());
+      
+      const startTime = audioCtx.currentTime;
+      
+      // Process each character in the sequence.
+      sequenceArray.forEach((char, i) => {
+        const noteTime = startTime + i * (noteDuration + gap);
+        // If the character is a rest marker (space or period), skip playing.
+        if (char === " " || char === ".") {
+          return;
+        }
+        // Calculate the semitone offset for this character.
+        const offset = sequenceMapping[char];
+        // Calculate the target MIDI numbers for bell and whistle.
+        const bellMidi = bellBase + offset;
+        const whistleMidi = whistleBase + offset;
+        // Convert MIDI numbers to frequencies.
+        const bellFreq = midiToFrequency(bellMidi);
+        const whistleFreq = midiToFrequency(whistleMidi);
+        // Play the bell sample (pitch-shifted and randomized) and the whistle tone.
+        playBellSampleAtTime(bellFreq, noteTime, noteDuration);
+        playWhistleNoteAtTime(whistleFreq, noteTime, noteDuration);
+      });
+    });
+  </script>
+</body>
+</html>

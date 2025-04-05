@@ -1,101 +1,125 @@
-/* style.css */
-
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #eee;
-  }
-  
-  /* Container splitting the page into two columns, limited to 900px and centered */
-  .container {
-    display: flex;
-    min-height: 100vh;
-    max-width: 900px;
-    margin: 0 auto;
-    background: #fff;
-  }
-  
-  .left-panel,
-  .right-panel {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .left-panel {
-    background-color: #f9f9f9;
-    border-right: 1px solid #ccc;
-  }
-  
-  h1, h2 {
-    margin: 0 0 10px;
-  }
-  
-  hr {
-    margin: 20px 0;
-  }
-  
-  /* Style for the Nink image */
-  .nink-image {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .nink-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
-  /* Piano graphic styles */
-  .piano {
-    position: relative;
-    width: 350px;      
-    height: 100px;     
-    margin: 10px;
-  }
-  
-  .white-keys {
-    display: flex;
-  }
-  
-  .white-key {
-    flex: 1;
-    height: 100%;
-    border: 1px solid #000;
-    background: #fff;
-    text-align: center;
-    line-height: 100px;
-    font-size: 14px;
-    position: relative;
-    box-sizing: border-box;
-  }
-  
-  .black-keys {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    pointer-events: none;
-  }
-  
-  .black-key {
-    position: absolute;
-    width: 25px;
-    height: 100%;
-    background: #000;
-    color: #fff;
-    text-align: center;
-    font-size: 10px;
-    line-height: 60px;
-    z-index: 2;
-  }
-  
-  /* Positioning the black keys relative to the white keys */
-  .black-key:nth-child(1) { left: calc((100% / 7) - 12.5px); }
-  .black-key:nth-child(2) { left: calc((2 * 100% / 7) - 12.5px); }
-  .black-key:nth-child(3) { left: calc((4 * 100% / 7) - 12.5px); }
-  .black-key:nth-child(4) { left: calc((5 * 100% / 7) - 12.5px); }
-  .black-key:nth-child(5) { left: calc((6 * 100% / 7) - 12.5px); }
-  
+  font-family: sans-serif;
+  background: #f0f8ff;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.column {
+  flex: 1;
+}
+
+.column.right {
+  background: #ffffffcc;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 400px;
+}
+
+.column.right h2,
+.column.right h3 {
+  margin-top: 1rem;
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+
+label {
+  margin-top: 1rem;
+  font-weight: bold;
+  display: block;
+}
+
+input,
+select {
+  padding: 0.4rem;
+  margin: 0.4rem 0 1rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.controls {
+  margin-top: 1rem;
+}
+
+button {
+  font-size: 1rem;
+  margin: 0.5rem 1rem 0.5rem 0;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #a7d7f9;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #82c4f8;
+}
+
+.nink-profile {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.nink-profile img {
+  width: 200px;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+}
+
+.nink-profile p {
+  margin: 0.2rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #e0e0e0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tab-button.active {
+  background: #90caf9;
+  color: #003366;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+code {
+  background: #eef;
+  padding: 0 4px;
+  border-radius: 4px;
+}
